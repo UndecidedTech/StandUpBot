@@ -5,7 +5,7 @@ import { SiDiscord } from "react-icons/si"
 function LoginPage() {
     return (
         <div className="Login-Button">
-            <Button content="Sign in with Discord" icon={SiDiscord}/>
+            <a href="#"><Button content="Sign in with Discord" icon={SiDiscord}/></a>
         </div>
     )
 }
