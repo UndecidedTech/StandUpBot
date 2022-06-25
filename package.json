@@ -1,0 +1,27 @@
+{
+  "name": "standupbot",
+  "version": "1.0.0",
+  "description": "Discord bot to coordinate our standup and todo list tracking",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write ./*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UndecidedTech/StandUpBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UndecidedTech/StandUpBot/issues"
+  },
+  "homepage": "https://github.com/UndecidedTech/StandUpBot#readme",
+  "dependencies": {
+    "discord.js": "^13.8.1",
+    "dotenv": "^16.0.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1"
+  }
+}
