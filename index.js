@@ -1,15 +1,44 @@
 require("dotenv").config();
-const { Client, Intents } = require("discord.js");
-const client = new Client({ intents: [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES ] });
+const express = require("express");
+const session = require("express-session");
+const passport = require("passport")
+const cors = require("cors");
+const DiscordStrategy = require("./passport");
 
-client.on("ready", () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient()
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(cors({
+    "origin": ["http://localhost:8080"],
+    "credentials": true,
+    "methods": ["GET", "POST", "OPTIONS"]
+}));
+app.use(express.json());
+app.use("/image", express.static("image"));
+app.use("/", express.static("./public"));
+app.use(session({
+    secret: "DanIsTheMan",
+    cookie: {
+        maxAge: 60000 * 60 * 24 
+    },
+    saveUninitialized: false
+}))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// routes and paths
+app.get("/auth/redirect", (req, res) => {
+    return res.send("success");
 });
 
-client.on('message', msg => {
-  if (msg.content === "ping") {
-    msg.channel.send("pong");
-  }
-})
+const users = require("./routes/users");
+app.use("/api/users", users);
 
-client.login(process.env.DISCORD_TOKEN);
+const standups = require("./routes/standups");
+app.use("/api/standups", standups);
+
+app.listen(port, () => console.log(`server started on ${port}`))
