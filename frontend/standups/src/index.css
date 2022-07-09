@@ -7,3 +7,16 @@
   justify-content: center;
   align-items: center;
 }
+
+.headerButtons {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+}
+
+.taskGrid {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  margin-top: 5%;
+}
