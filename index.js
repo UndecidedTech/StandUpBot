@@ -3,7 +3,7 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("passport")
 const cors = require("cors");
-const DiscordStrategy = require("./passport");
+const DiscordStrategy = require("./strategies/discordstrategy");
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient()
@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors({
-    "origin": ["http://localhost:8080"],
+    "origin": ["http://localhost:3000"],
     "credentials": true,
     "methods": ["GET", "POST", "OPTIONS"]
 }));
@@ -31,9 +31,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // routes and paths
-app.get("/auth/redirect", (req, res) => {
-    return res.send("success");
-});
+const auth = require("./routes/auth");
+app.use("/api/auth", auth);
 
 const users = require("./routes/users");
 app.use("/api/users", users);
