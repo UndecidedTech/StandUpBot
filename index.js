@@ -3,7 +3,7 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("passport")
 const cors = require("cors");
-const DiscordStrategy = require("./passport");
+const DiscordStrategy = require("./strategies/discordstrategy");
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient()
@@ -31,12 +31,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // routes and paths
-app.get("/auth/redirect", (req, res) => {
-    return res.send("success");
-});
+const auth = require("./routes/auth");
+app.use("/auth", auth);
 
 const users = require("./routes/users");
-app.use("/api/users", users);
+app.use("/users", users);
 
 const standups = require("./routes/standups");
 app.use("/api/standups", standups);
