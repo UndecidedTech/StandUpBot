@@ -1,13 +1,13 @@
 import React from "react";
-import { Button } from "semantic-ui-react"
-import { SiDiscord } from "react-icons/si"
 
 function LoginPage() {
-    return (
-        <div className="Login-Button">
-            <a href="#"><Button content="Sign in with Discord" icon={SiDiscord}/></a>
-        </div>
-    )
+  return (
+    <div className="Login-Button">
+      <a href="http://localhost:5000/api/auth">
+        <button>Sign in with Discord</button>
+      </a>
+    </div>
+  );
 }
 
 export default LoginPage;
