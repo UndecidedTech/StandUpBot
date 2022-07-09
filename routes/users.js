@@ -4,5 +4,4 @@ const passport = require("passport");
 
 const router = express.Router();
 
-
 module.exports = router;
