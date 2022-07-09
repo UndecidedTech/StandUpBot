@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors({
-    "origin": ["http://localhost:8080"],
+    "origin": ["http://localhost:3000"],
     "credentials": true,
     "methods": ["GET", "POST", "OPTIONS"]
 }));
@@ -32,10 +32,10 @@ app.use(passport.session());
 
 // routes and paths
 const auth = require("./routes/auth");
-app.use("/auth", auth);
+app.use("/api/auth", auth);
 
 const users = require("./routes/users");
-app.use("/users", users);
+app.use("/api/users", users);
 
 const standups = require("./routes/standups");
 app.use("/api/standups", standups);
