@@ -20,3 +20,11 @@
   justify-items: center;
   margin-top: 5%;
 }
+
+#calendar-date {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  font-size: 15px;
+  margin-bottom: 15px;
+}

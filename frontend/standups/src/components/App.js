@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import LoginPage from "./LoginPage";
 import { Switch, Route } from "react-router-dom";
 import { Header } from "semantic-ui-react";
@@ -7,7 +7,7 @@ import TaskTracker from "./TaskTracker";
 import { UserContext } from "../context/UserContext";
 
 function App() {
-  const { username } = UserContext();
+  const { username } = useContext(UserContext);
   const current = new Date();
   const date = `${
     current.getMonth() + 1
