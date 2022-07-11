@@ -19,7 +19,7 @@ router.get('/current-username', async (req, res) => {
         let user = null;
   
         if (typeof userId !== 'undefined') { // implement new query w/ primsa format
-          const user = await prisma.users.findUnique({
+          user = await prisma.users.findUnique({
             where: {
               id: userId,
             },
