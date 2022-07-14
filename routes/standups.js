@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
       try {
         const dailyStandup = await prisma.standUps.findFirst({
           where: {
-            date: new Date().toLocaleDateString();
+            date: new Date().toLocaleDateString()
           }
         })
       } catch (e) {
