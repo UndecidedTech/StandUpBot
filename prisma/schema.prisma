@@ -7,16 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type Tasks {
+  completed Boolean
+  label     String
+}
+
+type StandupMembers {
+  creatorId String
+  tasks     Tasks[]
+}
+
 model StandUps {
-  id   String   @id @default(auto()) @map("_id") @db.ObjectId
-  date DateTime
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  date           DateTime
+  standupMembers StandupMembers[]
 }
 
 model Users {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
-  username     String
-  discordId    String
-  avatar       String
-  refreshToken String
-  accessToken  String
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  username       String
+  discordId      String
+  avatar         String
+  refreshToken   String
+  accessToken    String
+  preferredColor String
 }

@@ -4,7 +4,6 @@ const session = require("express-session");
 const passport = require("passport");
 const cookieParser = require('cookie-parser');
 const cors = require("cors");
-const DiscordStrategy = require("./strategies/discordstrategy");
 
 const connectMongo = require("./connect");
 
