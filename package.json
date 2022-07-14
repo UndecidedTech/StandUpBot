@@ -19,6 +19,7 @@
   "homepage": "https://github.com/UndecidedTech/StandUpBot#readme",
   "dependencies": {
     "@prisma/client": "^3.15.2",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "discord.js": "^13.8.1",
     "dotenv": "^16.0.1",

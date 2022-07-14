@@ -2,11 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
+const cookieParser = require('cookie-parser');
 const cors = require("cors");
 const DiscordStrategy = require("./strategies/discordstrategy");
 
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const connectMongo = require("./connect");
+
+connectMongo();
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -16,6 +18,7 @@ app.use(cors({
     "credentials": true,
     "methods": ["GET", "POST", "OPTIONS"]
 }));
+app.use(cookieParser());
 app.use(express.json());
 app.use("/image", express.static("image"));
 app.use("/", express.static("./public"));
@@ -25,6 +28,7 @@ app.use(
     cookie: {
       maxAge: 60000 * 60 * 24,
     },
+    resave: false,
     saveUninitialized: false,
   })
 );

@@ -1,7 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const Users = require("../prisma") 
-
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -9,8 +7,8 @@ const router = express.Router();
 
 router.get('/current-username', async (req, res) => {
     try {
+      console.log("here:", req.session.passport.user);
       res.set('Cache-Control', 'no-store, no-cache');
-  
       if (!req.isAuthenticated()) {
         return res.status(401).send('User is not authenticated');
       }
@@ -37,11 +35,11 @@ router.get('/current-username', async (req, res) => {
   
         return res.send(user);
       } catch (e) {
-        return req.session.destroy(() => {
-          res.status(500).send({
-            message: e
-          });
-        });
+        // return req.session.destroy(() => {
+        //   res.status(500).send({
+        //     message: e
+        //   });
+        // });
       }
     } catch {
       return res.status(401).send({

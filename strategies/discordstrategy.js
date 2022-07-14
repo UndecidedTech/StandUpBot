@@ -10,11 +10,13 @@ const JWT_SECRET = process.env.JWT_SECRET;
 var DiscordStrategy = require("passport-discord").Strategy;
 
 passport.serializeUser(function (user, done) {
+  console.log("did I make it here:", user.id);
   done(null, user.id);
+
 });
 
-passport.deserializeUser(function (obj, done) {
-  done(null, obj.id);
+passport.deserializeUser(function (user, done) {
+  done(null, user.id);
 });
 
 var scopes = ["identify", "email", "guilds", "guilds.join"];
@@ -27,18 +29,16 @@ passport.use(
       callbackURL: process.env.CLIENT_REDIRECT,
       scope: scopes,
     },
-    async (accessToken, refreshToken, profile, cb) => {
+    async (accessToken, refreshToken, profile, done) => {
       console.log({ accessToken, refreshToken, profile });
-      const user = prisma.users.find(
-        { discordId: profile.id },
-        function (err, user) {
-          return user;
-        }
-      );
+      const user = await prisma.users.findFirst({
+        where: { discordId: profile.id }
+      });
 
       // if user exists return existing user
       if (user) {
-        return cb(null, user);
+        console.log("user exists: ", user);
+        return done(null, user);
       }
 
       // if user doesn't exist, create in DB
@@ -51,8 +51,8 @@ passport.use(
           accessToken: accessToken,
         },
       });
-
-      return cb(err, newUser);
+      console.log("Creating user: ", newUser);
+      return done(null, newUser);
     }
   )
 );
