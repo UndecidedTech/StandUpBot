@@ -13,7 +13,7 @@ type Tasks {
 }
 
 type StandupMembers {
-  creatorId String
+  creatorId String  @db.ObjectId
   tasks     Tasks[]
 }
 
