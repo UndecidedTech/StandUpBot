@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    // check auth
+    // TODO check auth when we can integrate auth with frontend (it's a disaster)
     // if (!req.isAuthenticated()) {
     //   return res.status(401).send('User is not authenticated');
     // }
@@ -19,6 +19,19 @@ router.get("/", async (req, res) => {
           date: true
         }
       })
+
+    if (!dailyStandup) {
+      // send message to channel or just reuse the create Standup function I expose from daily.js
+      console.log("Daily standup hasn't been created yet, create it and send standup message to users");
+      const newStandup = await prisma.standUps.create({
+        data: {
+          date: new Date().toLocaleDateString(),
+          standupMembers: []
+        }
+      });
+
+      return res.send(newStandup);
+    }
 
     return res.send(dailyStandup);
     } catch (e) {
