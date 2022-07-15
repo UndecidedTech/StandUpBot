@@ -19,7 +19,7 @@ type StandupMembers {
 
 model StandUps {
   id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  date           DateTime
+  date           String
   standupMembers StandupMembers[]
 }
 

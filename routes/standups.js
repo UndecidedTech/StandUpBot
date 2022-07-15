@@ -5,27 +5,26 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 router.get("/", async (req, res) => {
+    // check auth
+    // if (!req.isAuthenticated()) {
+    //   return res.status(401).send('User is not authenticated');
+    // }
     try {
-      // check auth
-      // if (!req.isAuthenticated()) {
-      //   return res.status(401).send('User is not authenticated');
-      // }
-      try {
-        const dailyStandup = await prisma.standUps.findFirst({
-          where: {
-            date: new Date().toLocaleDateString()
-          }
-        })
-      } catch (e) {
+      const dailyStandup = await prisma.standUps.findFirst({
+        where: {
+          date: new Date().toLocaleDateString()
+        },
+        select: {
+          standupMembers: true,
+          date: true
+        }
+      })
 
-      }
-      return res.send(dailyStandup);
+    return res.send(dailyStandup);
     } catch (e) {
-        console.log(e)
-        return res.status(401).send({
-          message: 'No user is signed in.'
-        });
+      console.error(e);
     }
 });
+
 
 module.exports = router;
