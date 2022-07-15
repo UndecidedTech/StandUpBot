@@ -25,6 +25,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
+    "node-schedule": "^2.1.0",
     "passport": "^0.6.0",
     "passport-discord": "^0.1.4"
   },

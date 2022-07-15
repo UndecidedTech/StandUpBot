@@ -4,6 +4,8 @@ const session = require("express-session");
 const passport = require("passport");
 const cookieParser = require('cookie-parser');
 const cors = require("cors");
+const schedule = require('node-schedule');
+const { createStandup } = "./daily.js";
 
 const connectMongo = require("./connect");
 
@@ -44,5 +46,11 @@ app.use("/api/users", users);
 
 const standups = require("./routes/standups");
 app.use("/api/standups", standups);
+
+
+// schedule daily creation of standups
+// responsible for creating in the at midnight and then also checking that one hasn't already been created
+// TODO use /api/standups to check if there is a standup for that day, if not create it for safety because I don't trust this
+const job = schedule.scheduleJob('0 0 0 * *', () => createStandup());
 
 app.listen(port, () => console.log(`server started on ${port}`));
