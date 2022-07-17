@@ -4,8 +4,13 @@ import { Switch, Route, useLocation } from "react-router-dom";
 import { Header } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import TaskTracker from "./TaskTracker";
-import { UserContext } from "../context/UserContext";
+import {
+  UserContext,
+  Action,
+  UserContextProvider,
+} from "../context/UserContext";
 import { createGlobalStyle } from "styled-components";
+import axios from "axios";
 
 function App() {
   const {
@@ -51,23 +56,25 @@ function App() {
 
   return (
     <>
-      <GlobalStyle />
-      <Header className="App-Header">
-        {username && username}
-        <NavBar />
-      </Header>
-      <Switch>
-        <Route exact path="/">
-          <LoginPage />
-        </Route>
-        <Route exact path="/tasks">
-          <TaskTracker
-            showToDo={showToDo}
-            onHandleClick={handleClick}
-            date={date}
-          />
-        </Route>
-      </Switch>
+      <UserContextProvider>
+        <GlobalStyle />
+        <Header className="App-Header">
+          {username && username}
+          <NavBar />
+        </Header>
+        <Switch>
+          <Route exact path="/">
+            <LoginPage />
+          </Route>
+          <Route exact path="/tasks">
+            <TaskTracker
+              showToDo={showToDo}
+              onHandleClick={handleClick}
+              date={date}
+            />
+          </Route>
+        </Switch>
+      </UserContextProvider>
     </>
   );
 }
