@@ -7,14 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-type Tasks {
-  completed Boolean
-  label     String
+model Tasks {
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  completed        Boolean
+  label            String
+  StandupMembers   StandupMembers? @relation(fields: [standupMembersId], references: [id])
+  standupMembersId String?         @db.ObjectId
 }
 
-type StandupMembers {
-  creatorId String  @db.ObjectId
-  tasks     Tasks[]
+model StandupMembers {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  creatorId  String    @db.ObjectId
+  tasks      Tasks[]
+  StandUps   StandUps? @relation(fields: [standUpsId], references: [id])
+  standUpsId String?   @db.ObjectId
 }
 
 model StandUps {
