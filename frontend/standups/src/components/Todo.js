@@ -1,7 +1,10 @@
 import React from "react";
 
 function Todo({ todo }) {
-  return <h4>{todo.label}</h4>;
+  <label>
+    <input type="checkbox" />
+    {todo.label}
+  </label>;
 }
 
 export default Todo;

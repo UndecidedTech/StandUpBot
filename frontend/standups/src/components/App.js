@@ -5,6 +5,7 @@ import { Header } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import TaskTracker from "./TaskTracker";
 import { UserContext } from "../context/UserContext";
+import { createGlobalStyle } from "styled-components";
 
 function App() {
   const { username } = useContext(UserContext);
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <>
+      <GlobalStyle />
       <Header className="App-Header">
         {username && username}
         <NavBar />
@@ -41,3 +43,9 @@ function App() {
 }
 
 export default App;
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: 'Poppins', sans-serif;
+  }
+`;
