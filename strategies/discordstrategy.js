@@ -15,8 +15,9 @@ passport.serializeUser(function (user, done) {
 
 });
 
-passport.deserializeUser(function (user, done) {
-  done(null, user.id);
+passport.deserializeUser(function (id, done) {
+  console.log("DESERIALIZE: ", id);
+  done(null, id);
 });
 
 var scopes = ["identify", "email", "guilds", "guilds.join"];
