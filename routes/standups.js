@@ -51,8 +51,7 @@ router.post("/join", async (req, res) => {
         }
       },
       include: {
-        Users: true,
-        Tasks: true
+        standupMembers: true
       }
     });
     return updatedStandup;
