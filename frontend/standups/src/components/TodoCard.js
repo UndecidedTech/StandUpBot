@@ -1,46 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { Card, Button } from "semantic-ui-react";
-import Todo from "./Todo";
-import { getTodos } from "../request-api/api";
-import axios from "axios";
+import React from "react";
+import styled from "styled-components";
 
 function TodoCard() {
-  const [toDos, setToDos] = useState(undefined);
-
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/standups").then((res) => {
-      console.log(res.data);
-    });
-  });
-
-  function handleTaskCheckbox(todo) {
-    const updatedTodos = toDos.map((cTodo) => {
-      if (todo.id === cTodo.id) {
-        cTodo.completed = !cTodo.completed;
-        return cTodo;
-      } else {
-        return cTodo;
-      }
-    });
-    setToDos(updatedTodos);
-  }
-
   return (
-    <Card>
-      <Card.Content>
-        <Card.Header>Bran's Task's</Card.Header>
-      </Card.Content>
-      {toDos &&
-        toDos.map((todo) => {
-          return <Todo onHandleTaskCheckbox={handleTaskCheckbox} todo={todo} />;
-        })}
-      <Card.Content extra>
-        <Button basic color="green">
-          Add New Task
-        </Button>
-      </Card.Content>
-    </Card>
+    <CardWrapper>
+      <DiscordAvi
+        background={
+          "https://www.howtogeek.com/wp-content/uploads/2021/07/Discord-Logo-Lede.png?height=200p&trim=2,2,2,2&crop=16:9"
+        }
+      />
+      <Username>Bran</Username>
+      <div>
+        <label>
+          <input type="checkbox" /> Do the dishes
+        </label>
+      </div>
+    </CardWrapper>
   );
 }
 
 export default TodoCard;
+
+const CardWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 300px;
+  grid-template-rows: 210px 210px 80px;
+  grid-template-areas: "image" "text" "stats";
+  border-radius: 18px;
+  background: white;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
+  text-align: center;
+`;
+
+const DiscordAvi = styled.div`
+  grid-area: image;
+  background-image: url(${({ background }) => background});
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  background-size: cover;
+`;
+
+const Username = styled.h2`
+  margin-top: 0px;
+  font-size 25px;
+  box-sizing: border-box;
+  min-width: 0px;
+  line-height: 1.2;
+  margin: 0px;
+  background-clip: text;
+  font-family: "Poppins", sans-serif;
+`;

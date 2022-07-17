@@ -29,10 +29,11 @@ const StyledHomePage = styled.div`
 `;
 
 const StyledLoginButton = styled.button`
-  background: #282c34;
+  background: #3b77d9;
   color: white;
   font-family: "Poppins", sans-serif;
   font-size: 25px;
-  border-radius: 15px;
+  border-radius: 10px;
   font-weight: 700;
+  border: none;
 `;
