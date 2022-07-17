@@ -67,8 +67,7 @@ async function getDailyStandup() {
       date: new Date().toLocaleDateString()
     },
     include: {
-      Users: true,
-      Tasks: true
+      standupMembers: true
     }
   });
   return standup;
