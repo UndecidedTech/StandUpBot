@@ -45,9 +45,8 @@ router.post("/join", async (req, res) => {
       },
       data: {
         standupMembers: {
-          push: {
-            usersId: userId,
-            tasks: []
+          create: {
+            usersId: userId
           }
         }
       }
