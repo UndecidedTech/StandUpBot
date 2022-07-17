@@ -33,6 +33,7 @@ router.post("/join", async (req, res) => {
 
     let userId = req.session.passport.user;
     let selectedStandup = await getDailyStandup();
+    console.log('does it exist: ', selectedStandup);
     if (!selectedStandup) {
       // create and add user to standup members
       selectedStandup = await createStandup();
