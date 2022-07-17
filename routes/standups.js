@@ -40,16 +40,18 @@ router.post("/join", async (req, res) => {
     }
 
     let updatedStandup = await prisma.standUps.update({
+      where: {
         id: selectedStandup.id
       }, 
-      {
+      data: {
         $push: {
           standupMembers: {
             creatorId: userId,
             tasks: []
           }
         }
-      })
+      }
+    });
     return updatedStandup;
   } catch (err) {
     console.error(err);
