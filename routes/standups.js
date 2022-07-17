@@ -1,7 +1,7 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-import createStandup from "../daily";
+const createStandup = require("../daily");
 
 const router = express.Router();
 
