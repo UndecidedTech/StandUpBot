@@ -64,6 +64,7 @@ async function getDailyStandup() {
       date: new Date().toLocaleDateString()
     },
     select: {
+      id: true,
       standupMembers: true,
       date: true
     }
