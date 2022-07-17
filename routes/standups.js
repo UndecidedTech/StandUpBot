@@ -32,8 +32,12 @@ router.post("/join", async (req, res) => {
     }
     const dailyStandup = await getDailyStandup();
     if (!dailyStandup) {
-      
+      // create and add user to standup members
+      let selectedStandup = await createStandup();
+      return selectedStandup
     }
+  } catch (err) {
+    console.error(err);
   }
 })
 
