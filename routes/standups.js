@@ -49,6 +49,10 @@ router.post("/join", async (req, res) => {
             usersId: userId
           }
         }
+      },
+      include: {
+        Users: true,
+        Tasks: true
       }
     });
     return updatedStandup;
@@ -66,6 +70,10 @@ async function getDailyStandup() {
       id: true,
       standupMembers: true,
       date: true
+    },
+    include: {
+      Users: true,
+      Tasks: true
     }
   });
   return standup;
