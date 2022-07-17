@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const cors = require("cors");
 const schedule = require('node-schedule');
 const { createStandup } = "./daily.js";
+const DiscordStrategy = require("./strategies/discordstrategy");
 
 const connectMongo = require("./connect");
 
