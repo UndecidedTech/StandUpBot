@@ -11,28 +11,43 @@ router.get("/", async (req, res) => {
     //   return res.status(401).send('User is not authenticated');
     // }
     try {
-      const dailyStandup = await prisma.standUps.findFirst({
-        where: {
-          date: new Date().toLocaleDateString()
-        },
-        select: {
-          standupMembers: true,
-          date: true
-        }
-      })
+      const dailyStandup = await getDailyStandup();
+      if (!dailyStandup) {
+        // send message to channel or just reuse the create Standup function I expose from daily.js
+        console.log("Daily standup hasn't been created yet, create it and send standup message to users");
+        const newStandup = await createStandup()
+        return res.send(newStandup);
+      }
 
-    if (!dailyStandup) {
-      // send message to channel or just reuse the create Standup function I expose from daily.js
-      console.log("Daily standup hasn't been created yet, create it and send standup message to users");
-      const newStandup = await createStandup()
-      return res.send(newStandup);
-    }
-
-    return res.send(dailyStandup);
+      return res.send(dailyStandup);
     } catch (e) {
       console.error(e);
     }
 });
 
+router.post("/join", async (req, res) => {
+  try {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("User is not authenticated.");
+    }
+    const dailyStandup = await getDailyStandup();
+    if (!dailyStandup) {
+      
+    }
+  }
+})
+
+async function getDailyStandup() {
+  const standup = await prisma.standUps.findFirst({
+    where: {
+      date: new Date().toLocaleDateString()
+    },
+    select: {
+      standupMembers: true,
+      date: true
+    }
+  });
+  return standup;
+}
 
 module.exports = router;

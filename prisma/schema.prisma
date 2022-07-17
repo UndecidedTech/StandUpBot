@@ -24,11 +24,10 @@ model StandUps {
 }
 
 model Users {
-  id             String @id @default(auto()) @map("_id") @db.ObjectId
-  username       String
-  discordId      String
-  avatar         String
-  refreshToken   String
-  accessToken    String
-  preferredColor String
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  username     String
+  discordId    String
+  avatar       String
+  refreshToken String
+  accessToken  String
 }
