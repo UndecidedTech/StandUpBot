@@ -1,6 +1,7 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+import createStandup from "../daily";
 
 const router = express.Router();
 
@@ -23,13 +24,7 @@ router.get("/", async (req, res) => {
     if (!dailyStandup) {
       // send message to channel or just reuse the create Standup function I expose from daily.js
       console.log("Daily standup hasn't been created yet, create it and send standup message to users");
-      const newStandup = await prisma.standUps.create({
-        data: {
-          date: new Date().toLocaleDateString(),
-          standupMembers: []
-        }
-      });
-
+      const newStandup = await createStandup()
       return res.send(newStandup);
     }
 
