@@ -30,12 +30,26 @@ router.post("/join", async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).send("User is not authenticated.");
     }
-    const dailyStandup = await getDailyStandup();
-    if (!dailyStandup) {
+
+    let userId = req.session.passport.user;
+    let selectedStandup = await getDailyStandup();
+    if (!selectedStandup) {
       // create and add user to standup members
-      let selectedStandup = await createStandup();
-      return selectedStandup
+      selectedStandup = await createStandup();
     }
+
+    let updatedStandup = await prisma.standUps.update({
+        id: newStandup.id || selectedStandup.id
+      }, 
+      {
+        $push: {
+          standupMembers: {
+            creatorId: userId,
+            tasks: []
+          }
+        }
+      })
+    return updatedStandup;
   } catch (err) {
     console.error(err);
   }
