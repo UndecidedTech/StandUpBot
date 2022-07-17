@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import LoginPage from "./LoginPage";
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Switch, Route, useLocation,  BrowserRouter as Router } from "react-router-dom";
 import { Header } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import TaskTracker from "./TaskTracker";
@@ -56,30 +56,38 @@ function App() {
 
   return (
     <>
-      <UserContextProvider>
-        <GlobalStyle />
-        <Header className="App-Header">
-          {username && username}
-          <NavBar />
-        </Header>
-        <Switch>
-          <Route exact path="/">
-            <LoginPage />
-          </Route>
-          <Route exact path="/tasks">
-            <TaskTracker
-              showToDo={showToDo}
-              onHandleClick={handleClick}
-              date={date}
-            />
-          </Route>
-        </Switch>
-      </UserContextProvider>
+      <GlobalStyle />
+      <Header className="App-Header">
+        {username && username}
+        <NavBar />
+      </Header>
+      <Switch>
+        <Route exact path="/">
+          <LoginPage />
+        </Route>
+        <Route exact path="/tasks">
+          <TaskTracker
+            showToDo={showToDo}
+            onHandleClick={handleClick}
+            date={date}
+          />
+        </Route>
+      </Switch>
     </>
   );
 }
 
-export default App;
+function AppWrapper() {
+  return (
+    <UserContextProvider>
+      <Router>
+        <App />
+      </Router>
+    </UserContextProvider>
+  );
+}
+
+export default AppWrapper;
 
 const GlobalStyle = createGlobalStyle`
   body {
