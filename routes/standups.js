@@ -39,7 +39,7 @@ router.post("/join", async (req, res) => {
     }
 
     let updatedStandup = await prisma.standUps.update({
-        id: newStandup.id || selectedStandup.id
+        id: selectedStandup.id
       }, 
       {
         $push: {
