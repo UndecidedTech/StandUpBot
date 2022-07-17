@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Card, Button } from "semantic-ui-react";
 import Todo from "./Todo";
 import { getTodos } from "../request-api/api";
+import axios from "axios";
 
 function TodoCard() {
   const [toDos, setToDos] = useState(undefined);
 
   useEffect(() => {
-    getTodos().then((data) => {
-      setToDos(data);
+    axios.get("http://localhost:5000/api/standups").then((res) => {
+      console.log(res.data);
     });
-  }, []);
+  });
 
   function handleTaskCheckbox(todo) {
     const updatedTodos = toDos.map((cTodo) => {

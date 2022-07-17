@@ -4,11 +4,14 @@ import { Switch, Route, useLocation } from "react-router-dom";
 import { Header } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import TaskTracker from "./TaskTracker";
-import { UserContext, UserContextProvider, Action } from "../context/UserContext";
-import axios from "axios";
+import { UserContext } from "../context/UserContext";
+import { createGlobalStyle } from "styled-components";
 
 function App() {
-  const { state: { username }, dispatch } = useContext(UserContext);
+  const {
+    state: { username },
+    dispatch,
+  } = useContext(UserContext);
   const location = useLocation();
 
   const current = new Date();
@@ -24,20 +27,23 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/users/current-username', { withCredentials: true });
+      const response = await axios.get(
+        "http://localhost:5000/api/users/current-username",
+        { withCredentials: true }
+      );
 
       dispatch({
         type: Action.UPDATE,
         payload: {
           username: response.data.username,
           image: response.data.image,
-          banner: response.data.banner
-        }
+          banner: response.data.banner,
+        },
       });
     } catch (error) {
       if (error.response.status === 401) {
         dispatch({
-          type: Action.RESET
+          type: Action.RESET,
         });
       }
     }
@@ -45,6 +51,7 @@ function App() {
 
   return (
     <>
+      <GlobalStyle />
       <Header className="App-Header">
         {username && username}
         <NavBar />
@@ -65,12 +72,10 @@ function App() {
   );
 }
 
-function AppWrapper() {
-  return (
-    <UserContextProvider>
-      <App />
-    </UserContextProvider>
-  )
-}
+export default App;
 
-export default AppWrapper;
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: 'Poppins', sans-serif;
+  }
+`;
