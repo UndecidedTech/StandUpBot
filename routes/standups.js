@@ -66,11 +66,6 @@ async function getDailyStandup() {
     where: {
       date: new Date().toLocaleDateString()
     },
-    select: {
-      id: true,
-      standupMembers: true,
-      date: true
-    },
     include: {
       Users: true,
       Tasks: true
