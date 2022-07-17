@@ -17,10 +17,11 @@ model Tasks {
 
 model StandupMembers {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  creatorId  String    @db.ObjectId
+  User       Users     @relation(fields: [usersId], references: [id])
   tasks      Tasks[]
   StandUps   StandUps? @relation(fields: [standUpsId], references: [id])
   standUpsId String?   @db.ObjectId
+  usersId    String    @db.ObjectId
 }
 
 model StandUps {
@@ -30,10 +31,11 @@ model StandUps {
 }
 
 model Users {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
-  username     String
-  discordId    String
-  avatar       String
-  refreshToken String
-  accessToken  String
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  username       String
+  discordId      String
+  avatar         String
+  refreshToken   String
+  accessToken    String
+  StandupMembers StandupMembers[]
 }
