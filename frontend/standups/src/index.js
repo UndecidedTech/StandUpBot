@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from "./components/App";
 import { BrowserRouter as Router } from "react-router-dom";
+import AppWrapper from './components/App';
 
 const styleLink = document.createElement("link");
 styleLink.rel = "stylesheet";
@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Router>
-      <App />
+      <AppWrapper />
     </Router>
   </React.StrictMode>
 );

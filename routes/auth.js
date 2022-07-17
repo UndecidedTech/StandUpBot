@@ -8,9 +8,7 @@ router.get("/", passport.authenticate("discord"));
 router.get("/redirect", passport.authenticate("discord", {
     failureRedirect: "/forbidden"
 }), (req, res) => {
-    console.log(req.body);
-    console.log(req);
-    res.send(200);
+    res.redirect("http://localhost:3000/tasks");
 })
 
 module.exports = router;

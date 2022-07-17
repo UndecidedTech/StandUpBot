@@ -18,17 +18,19 @@
   },
   "homepage": "https://github.com/UndecidedTech/StandUpBot#readme",
   "dependencies": {
-    "@prisma/client": "^3.15.2",
+    "@prisma/client": "^4.0.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "discord.js": "^13.8.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
+    "node-schedule": "^2.1.0",
     "passport": "^0.6.0",
     "passport-discord": "^0.1.4"
   },
   "devDependencies": {
     "prettier": "^2.7.1",
-    "prisma": "^3.15.2"
+    "prisma": "^4.0.0"
   }
 }
