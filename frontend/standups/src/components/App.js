@@ -30,13 +30,12 @@ function App() {
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(async () => {
-    try {
-      const response = await axios.get(
+  useEffect(() => {
+      console.log("here??");
+      axios.get(
         "http://localhost:5000/api/users/current-username",
         { withCredentials: true }
-      );
-
+      ).then((response) => {
       dispatch({
         type: Action.UPDATE,
         payload: {
@@ -45,13 +44,12 @@ function App() {
           banner: response.data.banner,
         },
       });
-    } catch (error) {
-      if (error.response.status === 401) {
+      })
+      .catch(err => {
         dispatch({
           type: Action.RESET,
         });
-      }
-    }
+      });
   }, [dispatch, location.pathname]);
 
   return (
