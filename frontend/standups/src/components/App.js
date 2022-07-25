@@ -1,6 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import LoginPage from "./LoginPage";
-import { Switch, Route, useLocation,  BrowserRouter as Router } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  useLocation,
+  BrowserRouter as Router,
+} from "react-router-dom";
 import { Header } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import TaskTracker from "./TaskTracker";
@@ -23,29 +28,31 @@ function App() {
   const date = `${
     current.getMonth() + 1
   }/${current.getDate()}/${current.getFullYear()}`;
-  const [showToDo, setTodo] = useState(false);
 
   function handleClick() {
-    setTodo(!showToDo);
+    axios.post("http://localhost:5000/api/standups/join", null, {
+      withCredentials: true,
+    });
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-      console.log("here??");
-      axios.get(
-        "http://localhost:5000/api/users/current-username",
-        { withCredentials: true }
-      ).then((response) => {
-      dispatch({
-        type: Action.UPDATE,
-        payload: {
-          username: response.data.username,
-          image: response.data.image,
-          banner: response.data.banner,
-        },
-      });
+    console.log("here??");
+    axios
+      .get("http://localhost:5000/api/users/current-username", {
+        withCredentials: true,
       })
-      .catch(err => {
+      .then((response) => {
+        dispatch({
+          type: Action.UPDATE,
+          payload: {
+            username: response.data.username,
+            image: response.data.image,
+            banner: response.data.banner,
+          },
+        });
+      })
+      .catch((err) => {
         dispatch({
           type: Action.RESET,
         });
@@ -64,11 +71,7 @@ function App() {
           <LoginPage />
         </Route>
         <Route exact path="/tasks">
-          <TaskTracker
-            showToDo={showToDo}
-            onHandleClick={handleClick}
-            date={date}
-          />
+          <TaskTracker onHandleClick={handleClick} date={date} />
         </Route>
       </Switch>
     </>

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function TodoCard() {
+function TodoCard({ member }) {
   return (
     <CardWrapper>
       <DiscordAvi
@@ -9,7 +9,7 @@ function TodoCard() {
           "https://www.howtogeek.com/wp-content/uploads/2021/07/Discord-Logo-Lede.png?height=200p&trim=2,2,2,2&crop=16:9"
         }
       />
-      <Username>Bran</Username>
+      <Username>{member.creatorId}</Username>
       <div>
         <label>
           <input type="checkbox" /> Do the dishes
@@ -23,7 +23,7 @@ export default TodoCard;
 
 const CardWrapper = styled.div`
   display: grid;
-  grid-template-columns: 300px;
+  grid-template-columns: 375px;
   grid-template-rows: 210px 210px 80px;
   grid-template-areas: "image" "text" "stats";
   border-radius: 18px;
