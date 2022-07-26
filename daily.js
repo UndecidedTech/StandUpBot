@@ -21,8 +21,7 @@ async function createStandup() {
   if (!todayStandup){
     await prisma.standUps.create({
         data: {
-            date: new Date().toLocaleDateString(),
-            standupMembers: []
+            date: new Date().toLocaleDateString()
         }
     })
   }

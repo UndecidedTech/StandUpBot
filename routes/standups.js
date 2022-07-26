@@ -11,6 +11,7 @@ router.get("/", async (req, res) => {
     //   return res.status(401).send('User is not authenticated');
     // }
     try {
+      console.log("Am I here?");
       const dailyStandup = await getDailyStandup();
       if (!dailyStandup) {
         // send message to channel or just reuse the create Standup function I expose from daily.js
@@ -32,13 +33,12 @@ router.post("/join", async (req, res) => {
     }
 
     let userId = req.session.passport.user;
+    let currUser = await prisma.users.findFirst({
+      where: {
+        id: userId
+      }
+    })
     let selectedStandup = await getDailyStandup();
-    console.log('does it exist: ', selectedStandup, selectedStandup._id, selectedStandup.id);
-    if (!selectedStandup) {
-      // create and add user to standup members
-      selectedStandup = await createStandup();
-    }
-
     let updatedStandup = await prisma.standUps.update({
       where: {
         id: selectedStandup.id
@@ -46,15 +46,21 @@ router.post("/join", async (req, res) => {
       data: {
         standupMembers: {
           create: {
-            usersId: userId
+            userId: userId
           }
         }
       },
       include: {
-        standupMembers: true
+        standupMembers: {
+          select: {
+            user: true
+          }
+        }
       }
     });
-    return updatedStandup;
+
+    console.log("here: ", updatedStandup);
+    return res.send(updatedStandup);
   } catch (err) {
     console.error(err);
   }
@@ -66,7 +72,11 @@ async function getDailyStandup() {
       date: new Date().toLocaleDateString()
     },
     include: {
-      standupMembers: true
+      standupMembers: {
+        select: {
+          user: true
+        }
+      }
     }
   });
   return standup;

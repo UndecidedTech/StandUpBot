@@ -11,23 +11,23 @@ model Tasks {
   id               String          @id @default(auto()) @map("_id") @db.ObjectId
   completed        Boolean
   label            String
-  StandupMembers   StandupMembers? @relation(fields: [standupMembersId], references: [id])
-  standupMembersId String?         @db.ObjectId
+  StandUpMembers   StandUpMembers? @relation(fields: [standUpMembersId], references: [id])
+  standUpMembersId String?         @db.ObjectId
 }
 
-model StandupMembers {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  User       Users     @relation(fields: [usersId], references: [id])
+model StandUpMembers {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   tasks      Tasks[]
-  StandUps   StandUps? @relation(fields: [standUpsId], references: [id])
-  standUpsId String?   @db.ObjectId
-  usersId    String    @db.ObjectId
+  userId     String   @db.ObjectId
+  user       Users    @relation(fields: [userId], references: [id])
+  StandUp    StandUps @relation(fields: [standUpsId], references: [id])
+  standUpsId String   @db.ObjectId
 }
 
 model StandUps {
   id             String           @id @default(auto()) @map("_id") @db.ObjectId
   date           String
-  standupMembers StandupMembers[]
+  standupMembers StandUpMembers[]
 }
 
 model Users {
@@ -37,5 +37,5 @@ model Users {
   avatar         String
   refreshToken   String
   accessToken    String
-  StandupMembers StandupMembers[]
+  StandUpMembers StandUpMembers[]
 }
