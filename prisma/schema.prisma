@@ -9,7 +9,7 @@ datasource db {
 
 model Tasks {
   id               String          @id @default(auto()) @map("_id") @db.ObjectId
-  completed        Boolean
+  completed        Boolean         @default(false)
   label            String
   StandUpMembers   StandUpMembers? @relation(fields: [standUpMembersId], references: [id])
   standUpMembersId String?         @db.ObjectId

@@ -53,7 +53,8 @@ router.post("/join", async (req, res) => {
       include: {
         standupMembers: {
           select: {
-            user: true
+            user: true,
+            tasks: true,
           }
         }
       }
@@ -61,6 +62,38 @@ router.post("/join", async (req, res) => {
 
     console.log("here: ", updatedStandup);
     return res.send(updatedStandup);
+  } catch (err) {
+    console.error(err);
+  }
+})
+
+router.post("/task", async (req, res) => {
+  try {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("User is not authenticated.");
+    }
+
+    let userId = req.session.passport.user;
+    let standupId = req.body.standupId;
+    // update current standup with req.body
+    let updatedStandupMembers = await prisma.standUpMembers.update({
+      where: {
+        $and: [
+          { standUpsId: standupId },
+          { userId: userId }
+        ]
+      },
+      data: {
+        tasks: {
+          create: {
+            label: req.body.label
+          }
+        }
+      }
+    })
+
+    console.log(updatedStandupMembers);
+    return res.send(updatedStandupMembers);
   } catch (err) {
     console.error(err);
   }
@@ -74,7 +107,8 @@ async function getDailyStandup() {
     include: {
       standupMembers: {
         select: {
-          user: true
+          user: true,
+          tasks: true
         }
       }
     }
