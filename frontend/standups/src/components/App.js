@@ -18,6 +18,7 @@ import { createGlobalStyle } from "styled-components";
 import axios from "axios";
 
 function App() {
+  const [members, setMembers] = useState([]);
   const {
     state: { username },
     dispatch,
@@ -29,10 +30,26 @@ function App() {
     current.getMonth() + 1
   }/${current.getDate()}/${current.getFullYear()}`;
 
-  function handleClick() {
-    axios.post("http://localhost:5000/api/standups/join", null, {
-      withCredentials: true,
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/standups/").then((res) => {
+      setMembers(res.data.standupMembers);
+      dispatch({
+        type: Action.UPDATE,
+        payload: {
+          standupId: res.data.id,
+        },
+      });
     });
+  }, []);
+
+  function handleClick() {
+    axios
+      .post("http://localhost:5000/api/standups/join", null, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setMembers(res.data);
+      });
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,7 +88,11 @@ function App() {
           <LoginPage />
         </Route>
         <Route exact path="/tasks">
-          <TaskTracker onHandleClick={handleClick} date={date} />
+          <TaskTracker
+            onHandleClick={handleClick}
+            date={date}
+            members={members}
+          />
         </Route>
       </Switch>
     </>

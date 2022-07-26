@@ -1,18 +1,9 @@
-import { useEffect, useState } from "react";
 import { Button } from "semantic-ui-react";
 import TodoCard from "./TodoCard";
 import styled from "styled-components";
 import { SiCoffeescript } from "react-icons/si";
-import axios from "axios";
 
-function TaskTracker({ date, onHandleClick }) {
-  const [members, setMembers] = useState([]);
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/standups/")
-      .then((res) => setMembers(res.data.standupMembers));
-  }, []);
-  console.log(members);
+function TaskTracker({ date, onHandleClick, members }) {
   return (
     <>
       <Heading>
@@ -28,9 +19,10 @@ function TaskTracker({ date, onHandleClick }) {
         </Button>
       </div>
       <CardContainer>
-        {members.map((member) => {
-          return <TodoCard member={member} />;
-        })}
+        {members &&
+          members.map((member) => {
+            return <TodoCard member={member} />;
+          })}
       </CardContainer>
     </>
   );

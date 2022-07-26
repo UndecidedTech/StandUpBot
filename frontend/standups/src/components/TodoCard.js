@@ -1,19 +1,77 @@
-import React from "react";
+// import { MembershipStates } from "discord.js/typings/enums";
+import axios from "axios";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
+import { UserContext } from "../context/UserContext";
 
 function TodoCard({ member }) {
+  const {
+    state: { standupId },
+  } = useContext(UserContext);
+  const [showForm, setShowForm] = useState(true);
+  const [newTaskObj, setNewTaskObj] = useState({
+    label: "",
+  });
+
+  function handleShowForm() {
+    setShowForm(!showForm);
+  }
+
+  function handleChange(e) {
+    setNewTaskObj({ [e.target.name]: e.target.value });
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    axios
+      .post(
+        "http://localhost:5000/api/standups/task",
+        {
+          ...newTaskObj,
+          standupId,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        // setMembers based off this return
+        console.log("submit: ", res.data);
+      });
+  }
+
   return (
     <CardWrapper>
-      <DiscordAvi
-        background={
-          "https://www.howtogeek.com/wp-content/uploads/2021/07/Discord-Logo-Lede.png?height=200p&trim=2,2,2,2&crop=16:9"
-        }
-      />
-      <Username>{member.creatorId}</Username>
+      <DiscordAviBackground>
+        <DiscordAvi background={member.user.avatar} />
+        <Username>{member.user.username}</Username>
+      </DiscordAviBackground>
       <div>
-        <label>
-          <input type="checkbox" /> Do the dishes
-        </label>
+        {member &&
+          member.tasks &&
+          member.tasks.map((task) => {
+            return (
+              <label>
+                <input type="checkbox" /> {task}
+              </label>
+            );
+          })}
+      </div>
+      <div>
+        {showForm ? (
+          <CreateTask onClick={handleShowForm}>New Task</CreateTask>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <label>
+              New Task:
+              <input
+                type="text"
+                name="label"
+                onChange={handleChange}
+                value={newTaskObj.label}
+              />
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
+        )}
       </div>
     </CardWrapper>
   );
@@ -38,6 +96,12 @@ const DiscordAvi = styled.div`
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   background-size: cover;
+  border-radius: 100px;
+  width: 10rem;
+  height: 10rem;
+  margin: 0 auto;
+  margin-top: 15px;
+  margin-bottom: 10px;
 `;
 
 const Username = styled.h2`
@@ -49,4 +113,19 @@ const Username = styled.h2`
   margin: 0px;
   background-clip: text;
   font-family: "Poppins", sans-serif;
+  color: white;
+`;
+
+const DiscordAviBackground = styled.div`
+  background-color: #2c2f33;
+  border-radius: 18px 18px 0px 0px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+`;
+
+const CreateTask = styled.button`
+  border-radius: 18px;
+  background: transparent;
+  color: green;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
 `;

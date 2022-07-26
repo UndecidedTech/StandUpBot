@@ -8,6 +8,7 @@ export const Action = {
 const initialState = {
   username: undefined,
   image: undefined,
+  standupId: undefined,
 };
 
 const reducer = (state, { type, payload }) => {
