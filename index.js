@@ -8,11 +8,33 @@ const schedule = require('node-schedule');
 const { createStandup } = "./daily.js";
 const DiscordStrategy = require("./strategies/discordstrategy");
 
+var MongoDBStore = require('connect-mongodb-session')(session);
+
+var app = express();
+var store = new MongoDBStore({
+  uri: process.env.DATABASE_URL,
+  collection: 'mySessions'
+});
+
+// Catch errors
+store.on('error', function(error) {
+  console.log(error);
+});
+
+app.use(require('express-session')({
+  secret: "DanIsTheMan",
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+  },
+  store: store,
+  resave: true,
+  saveUninitialized: true
+}));
+
 const connectMongo = require("./connect");
 
 connectMongo();
 
-const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors({

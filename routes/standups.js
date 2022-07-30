@@ -57,6 +57,7 @@ router.post("/join", async (req, res) => {
           select: {
             user: true,
             tasks: true,
+            id: true
           },
         },
       },
@@ -69,6 +70,42 @@ router.post("/join", async (req, res) => {
   }
 });
 
+router.put("/task", async (req, res) => {
+  try {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("User is not authenticated.");
+    }
+
+    let userId = req.session.passport.user;
+    let taskId = req.body.id;
+    let nCompleted = req.body.completed;
+    let nLabel = req.body.label;
+    // update current standup with req.body
+    let update = {};
+
+    if (nCompleted) {
+      update["completed"] = nCompleted;
+    }
+    if (nLabel) {
+      update["label"] = nLabel;
+    }
+
+    await prisma.tasks.update({
+      where: {
+        id: taskId
+      },
+      data: update,
+    });
+
+    let updatedStandupMembers = await getDailyStandup();
+
+    console.log(updatedStandupMembers);
+    return res.send(updatedStandupMembers);
+  }catch(err) {
+    console.error(err)
+  }
+})
+
 router.post("/task", async (req, res) => {
   try {
     if (!req.isAuthenticated()) {
@@ -76,17 +113,17 @@ router.post("/task", async (req, res) => {
     }
 
     let userId = req.session.passport.user;
-    let standupId = req.body.standupId;
+    let standupMemberId = req.body.id;
     // update current standup with req.body
     let updatedStandupMembers = await prisma.standUpMembers.update({
       where: {
-        standUpsId: standupId,
-        userId: userId,
+        id: standupMemberId
       },
       data: {
         tasks: {
           create: {
             label: req.body.label,
+            completed: false
           },
         },
       },
@@ -109,6 +146,7 @@ async function getDailyStandup() {
         select: {
           user: true,
           tasks: true,
+          id: true
         },
       },
     },

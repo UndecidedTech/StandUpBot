@@ -13,6 +13,8 @@ function TodoCard({ member }) {
     label: "",
   });
 
+  console.log("memberData: ", member)
+
   function handleShowForm() {
     setShowForm(!showForm);
   }
@@ -28,7 +30,7 @@ function TodoCard({ member }) {
         "http://localhost:5000/api/standups/task",
         {
           ...newTaskObj,
-          standupId,
+          id: member.id
         },
         { withCredentials: true }
       )
@@ -50,7 +52,7 @@ function TodoCard({ member }) {
           member.tasks.map((task) => {
             return (
               <label>
-                <input type="checkbox" /> {task}
+                <input type="checkbox" /> {task.label}
               </label>
             );
           })}

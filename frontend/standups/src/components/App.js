@@ -40,7 +40,7 @@ function App() {
         },
       });
     });
-  }, []);
+  }, [dispatch]);
 
   function handleClick() {
     axios
