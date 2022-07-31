@@ -4,7 +4,7 @@ import {
   Switch,
   Route,
   useLocation,
-  BrowserRouter as Router,
+  BrowserRouter as Router
 } from "react-router-dom";
 import { Header } from "semantic-ui-react";
 import NavBar from "./NavBar";
@@ -39,7 +39,7 @@ function App() {
           standupId: res.data.id,
         },
       });
-    });
+    })
   }, [dispatch]);
 
   function handleClick() {
