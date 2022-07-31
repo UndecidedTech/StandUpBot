@@ -14,6 +14,9 @@ router.get("/", async (req, res) => {
     }
 
     const dailyStandup = await getDailyStandup();
+
+    // update discord message
+    await updateMessage(dailyStandup);
     return res.send(dailyStandup);
   } catch (e) {
     console.error(e);
@@ -129,7 +132,6 @@ router.post("/task", async (req, res) => {
     const standup = await getDailyStandup();
     updateMessage(standup);
 
-    console.log(updatedStandupMembers);
     return res.send(updatedStandupMembers);
   } catch (err) {
     console.error(err);
@@ -152,6 +154,10 @@ router.delete("/task", async (req,res) => {
     })
     
     let updatedStandup = await getDailyStandup();
+
+    // update discord message
+    await updateMessage(updatedStandup);
+
     return res.send(updatedStandup);
   } catch(err) {
     console.error(err);
