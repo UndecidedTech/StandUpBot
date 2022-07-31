@@ -18,7 +18,7 @@ import { createGlobalStyle } from "styled-components";
 import axios from "axios";
 
 function App() {
-  const [members, setMembers] = useState([]);
+  const [standupObj, setStandupObj] = useState({});
   const {
     state: { username },
     dispatch,
@@ -32,7 +32,7 @@ function App() {
 
   useEffect(() => {
     axios.get("http://localhost:5000/api/standups/").then((res) => {
-      setMembers(res.data.standupMembers);
+      setStandupObj(res.data);
       dispatch({
         type: Action.UPDATE,
         payload: {
@@ -48,7 +48,7 @@ function App() {
         withCredentials: true,
       })
       .then((res) => {
-        setMembers(res.data);
+        setStandupObj(res.data);
       });
   }
 
@@ -91,7 +91,7 @@ function App() {
           <TaskTracker
             onHandleClick={handleClick}
             date={date}
-            members={members}
+            standupObj={standupObj}
           />
         </Route>
       </Switch>

@@ -3,7 +3,7 @@ import TodoCard from "./TodoCard";
 import styled from "styled-components";
 import { SiCoffeescript } from "react-icons/si";
 
-function TaskTracker({ date, onHandleClick, members }) {
+function TaskTracker({ date, onHandleClick, standupObj }) {
   return (
     <>
       <Heading>
@@ -19,8 +19,8 @@ function TaskTracker({ date, onHandleClick, members }) {
         </Button>
       </div>
       <CardContainer>
-        {members &&
-          members.map((member) => {
+        {standupObj &&
+          standupObj.standupMembers.map((member) => {
             return <TodoCard member={member} />;
           })}
       </CardContainer>
