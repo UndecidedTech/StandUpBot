@@ -28,6 +28,7 @@ model StandUps {
   id             String           @id @default(auto()) @map("_id") @db.ObjectId
   date           String
   standupMembers StandUpMembers[]
+  messageId      String           @default("")
 }
 
 model Users {

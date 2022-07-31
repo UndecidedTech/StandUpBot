@@ -1,27 +1,22 @@
+require("dotenv").config();
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const createStandup = require("../daily");
+const { createStandup, client } = require("../daily");
+const { generateMessage } = require("../markup");
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  // TODO check auth when we can integrate auth with frontend (it's a disaster)
-  // if (!req.isAuthenticated()) {
-  //   return res.status(401).send('User is not authenticated');
-  // }
   try {
-    console.log("Am I here?");
-    const dailyStandup = await getDailyStandup();
-    if (!dailyStandup) {
-      // send message to channel or just reuse the create Standup function I expose from daily.js
-      console.log(
-        "Daily standup hasn't been created yet, create it and send standup message to users"
-      );
-      const newStandup = await createStandup();
-      return res.send(newStandup);
+    if (!req.isAuthenticated()) {
+      return res.status(401).send('User is not authenticated');
     }
 
+    const dailyStandup = await getDailyStandup();
+
+    // update discord message
+    await updateMessage(dailyStandup);
     return res.send(dailyStandup);
   } catch (e) {
     console.error(e);
@@ -35,11 +30,12 @@ router.post("/join", async (req, res) => {
     }
 
     let userId = req.session.passport.user;
-    let currUser = await prisma.users.findFirst({
-      where: {
-        id: userId,
-      },
-    });
+    // let currUser = await prisma.users.findFirst({
+    //   where: {
+    //     id: userId,
+    //   },
+    // });
+
     let selectedStandup = await getDailyStandup();
     let updatedStandup = await prisma.standUps.update({
       where: {
@@ -63,7 +59,10 @@ router.post("/join", async (req, res) => {
       },
     });
 
-    console.log("here: ", updatedStandup);
+    
+    // invoke generate message
+    await updateMessage(updatedStandup)
+
     return res.send(updatedStandup);
   } catch (err) {
     console.error(err);
@@ -97,10 +96,11 @@ router.put("/task", async (req, res) => {
       data: update,
     });
 
-    let updatedStandupMembers = await getDailyStandup();
-
-    console.log(updatedStandupMembers);
-    return res.send(updatedStandupMembers);
+    // invoke generate message
+    let updatedStandup = await getDailyStandup();
+    await updateMessage(updatedStandup)
+    
+    return res.send(updatedStandup);
   }catch(err) {
     console.error(err)
   }
@@ -129,15 +129,43 @@ router.post("/task", async (req, res) => {
       },
     });
 
-    console.log(updatedStandupMembers);
+    const standup = await getDailyStandup();
+    updateMessage(standup);
+
     return res.send(updatedStandupMembers);
   } catch (err) {
     console.error(err);
   }
 });
 
+router.delete("/task", async (req,res) => {
+  try {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("User is not authenticated.");
+    }
+
+    let userId = req.session.passport.user;
+    let taskId = req.params.taskId; 
+
+    await prisma.tasks.delete({
+      where: {
+        id: taskId
+      }
+    })
+    
+    let updatedStandup = await getDailyStandup();
+
+    // update discord message
+    await updateMessage(updatedStandup);
+
+    return res.send(updatedStandup);
+  } catch(err) {
+    console.error(err);
+  }
+})
+
 async function getDailyStandup() {
-  const standup = await prisma.standUps.findFirst({
+  let standup = await prisma.standUps.findFirst({
     where: {
       date: new Date().toLocaleDateString(),
     },
@@ -151,7 +179,20 @@ async function getDailyStandup() {
       },
     },
   });
+
+  if (!standup) {
+    console.log("Couldn't find todays standup, making a new one")
+    standup = await createStandup();
+  }
+
   return standup;
+}
+
+async function updateMessage (standup) {
+  const channel = await client.channels.cache.get(process.env.CHANNEL_ID);
+  const message = await channel.messages.fetch(standup.messageId);
+  console.log("is message fetch working?: ", message);
+  message.edit(generateMessage(standup));
 }
 
 module.exports = router;

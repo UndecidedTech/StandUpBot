@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.get('/current-username', async (req, res) => {
     try {
-      console.log("here:", req.session.passport.user);
       res.set('Cache-Control', 'no-store, no-cache');
       if (!req.isAuthenticated()) {
         return res.status(401).send('User is not authenticated');
