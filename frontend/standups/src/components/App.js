@@ -31,7 +31,7 @@ function App() {
   }/${current.getDate()}/${current.getFullYear()}`;
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/standups/").then((res) => {
+    axios.get("/standups").then((res) => {
       setStandupObj(res.data);
       dispatch({
         type: Action.UPDATE,
@@ -44,7 +44,7 @@ function App() {
 
   function handleClick() {
     axios
-      .post("http://localhost:5000/api/standups/join", null, {
+      .post("/standups/join", null, {
         withCredentials: true,
       })
       .then((res) => {
@@ -56,7 +56,7 @@ function App() {
   useEffect(() => {
     console.log("here??");
     axios
-      .get("http://localhost:5000/api/users/current-username", {
+      .get("/users/current-username", {
         withCredentials: true,
       })
       .then((response) => {

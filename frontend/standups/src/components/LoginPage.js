@@ -2,10 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { SiDiscord } from "react-icons/si";
 
+const { REACT_APP_MY_ENV } = process.env;
+
 function LoginPage() {
   return (
     <StyledHomePage>
-      <a href="http://localhost:5000/api/auth">
+      <a href={`${REACT_APP_MY_ENV ? "" : "http://localhost:5000"}/api/auth`}>
         <StyledLoginButton>
           <SiDiscord />
           Login with Discord

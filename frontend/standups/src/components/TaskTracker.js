@@ -19,7 +19,7 @@ function TaskTracker({ date, onHandleClick, standupObj }) {
         </Button>
       </div>
       <CardContainer>
-        {standupObj &&
+        {standupObj && standupObj.standupMembers &&
           standupObj.standupMembers.map((member) => {
             return <TodoCard member={member} />;
           })}

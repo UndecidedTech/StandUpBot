@@ -25,7 +25,7 @@ function TodoCard({ member }) {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:5000/api/standups/task",
+        "/standups/task",
         {
           ...newTaskObj,
           standupId,

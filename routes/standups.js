@@ -16,7 +16,21 @@ router.get("/", async (req, res) => {
     const dailyStandup = await getDailyStandup();
 
     // update discord message
-    await updateMessage(dailyStandup);
+    // await updateMessage(dailyStandup);
+    if (!dailyStandup.messageId) {
+      const channel = client.channels.cache.get(process.env.CHANNEL_ID);
+      const message = await channel.send(generateMessage(dailyStandup));
+      
+      await prisma.standUps.update({
+        where: {
+          id: dailyStandup.id
+        },
+        data: {
+          messageId: message.id
+        }
+      })
+    }
+
     return res.send(dailyStandup);
   } catch (e) {
     console.error(e);
@@ -37,6 +51,12 @@ router.post("/join", async (req, res) => {
     // });
 
     let selectedStandup = await getDailyStandup();
+    let count = selectedStandup.standupMembers.some(member => member.userId === userId)
+
+    if (count) {
+      return res.send(selectedStandup);
+    }
+
     let updatedStandup = await prisma.standUps.update({
       where: {
         id: selectedStandup.id,
