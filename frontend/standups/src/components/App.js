@@ -31,7 +31,7 @@ function App() {
   }/${current.getDate()}/${current.getFullYear()}`;
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/standups/").then((res) => {
+    axios.get("http://localhost:5000/api/standups/", {withCredentials: true}).then((res) => {
       setMembers(res.data.standupMembers);
       dispatch({
         type: Action.UPDATE,
