@@ -42,7 +42,8 @@ passport.use(
         let updatedUser = await prisma.users.update({
           where: { discordId: profile.id },
           data: {
-            avatar: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.jpg`
+            avatar: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.jpg`,
+            username: profile.username
           }
         })
         return done(null, updatedUser);
