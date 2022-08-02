@@ -161,7 +161,7 @@ router.post("/task", async (req, res) => {
   }
 });
 
-router.delete("/task", async (req, res) => {
+router.delete("/task/:id", async (req, res) => {
   try {
     if (!req.isAuthenticated()) {
       return res.status(401).send("User is not authenticated.");
@@ -169,6 +169,7 @@ router.delete("/task", async (req, res) => {
 
     let userId = req.session.passport.user;
     let taskId = req.params.taskId;
+    console.log(taskId);
 
     await prisma.tasks.delete({
       where: {
