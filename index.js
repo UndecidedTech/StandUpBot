@@ -77,7 +77,7 @@ app.use("/api/standups", standups);
 const job = schedule.scheduleJob('0 0 0 * *', () => createStandup());
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("frontend/standups/build"));
+  app.use(express.static("./frontend/standups/build"));
 }
 
 app.listen(port, () => console.log(`server started on ${port}`));
