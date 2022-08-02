@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const { Client, Intents } = require("discord.js");
 const client = new Client({ intents: [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES ] });
-const generateMessage = require("./markup.js");
+const { generateMessage } = require("./markup.js");
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
