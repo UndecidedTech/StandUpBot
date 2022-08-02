@@ -133,7 +133,8 @@ router.post("/task", async (req, res) => {
     // update current standup with req.body
     let updatedStandupMembers = await prisma.standUpMembers.update({
       where: {
-        id: standupMemberId
+        id: standupMemberId,
+        userId
       },
       data: {
         tasks: {
@@ -144,6 +145,10 @@ router.post("/task", async (req, res) => {
         },
       },
     });
+
+    if (!updatedStandupMembers) {
+      return res.status(401).send("User is not authorized to perform this action");
+    }
 
     const standup = await getDailyStandup();
     updateMessage(standup);

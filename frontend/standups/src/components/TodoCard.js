@@ -4,15 +4,16 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { UserContext } from "../context/UserContext";
 
-function TodoCard({ member }) {
-  const {
-    state: { standupId },
-  } = useContext(UserContext);
+
+function TodoCard({ member, setStandupObj }) {
+
+  const { state: { username } } = useContext(UserContext);
   const [showForm, setShowForm] = useState(true);
   const [newTaskObj, setNewTaskObj] = useState({
     label: "",
   });
 
+  console.log(member.user.username, username);
   function handleShowForm() {
     setShowForm(!showForm);
   }
@@ -35,6 +36,7 @@ function TodoCard({ member }) {
       .then((res) => {
         // setMembers based off this return
         console.log("submit: ", res.data);
+        setStandupObj(res.data);
       });
   }
 
@@ -55,25 +57,28 @@ function TodoCard({ member }) {
             );
           })}
       </div>
-      <div>
-        {showForm ? (
-          <CreateTask onClick={handleShowForm}>New Task</CreateTask>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <label>
-              New Task:
-              <input
-                type="text"
-                name="label"
-                onChange={handleChange}
-                value={newTaskObj.label}
-              />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
-        )}
-      </div>
-    </CardWrapper>
+       { member.user.username === username && (
+        <div>
+          {showForm ? (
+            <CreateTask onClick={handleShowForm}>New Task</CreateTask>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <label>
+                New Task:
+                <input
+                  type="text"
+                  name="label"
+                  onChange={handleChange}
+                  value={newTaskObj.label}
+                />
+              </label>
+              <input type="submit" value="Submit" />
+            </form>
+          )}
+        </div>
+      )
+    }
+          </CardWrapper>
   );
 }
 
