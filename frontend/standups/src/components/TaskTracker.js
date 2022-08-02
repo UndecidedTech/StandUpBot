@@ -19,7 +19,8 @@ function TaskTracker({ date, onHandleClick, standupObj, setStandupObj }) {
         </Button>
       </div>
       <CardContainer>
-        {standupObj && standupObj.standupMembers &&
+        {standupObj &&
+          standupObj.standupMembers &&
           standupObj.standupMembers.map((member) => {
             return <TodoCard member={member} setStandupObj={setStandupObj} />;
           })}
@@ -38,6 +39,8 @@ const CardContainer = styled.div`
   justify-content: center;
   background: white;
   overflow: hidden;
+  flex-wrap: wrap;
+  gap: 20px;
 `;
 
 const TodaysDate = styled.h2`

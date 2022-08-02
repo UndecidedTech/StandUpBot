@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     if (!req.isAuthenticated()) {
-      return res.status(401).send('User is not authenticated');
+      return res.status(401).send("User is not authenticated");
     }
 
     const dailyStandup = await getDailyStandup();
@@ -18,17 +18,17 @@ router.get("/", async (req, res) => {
     // update discord message
     // await updateMessage(dailyStandup);
     if (!dailyStandup.messageId) {
-      const channel = client.channels.cache.get(process.env.CHANNEL_ID);
+      const channel = await client.channels.cache.get(process.env.CHANNEL_ID);
       const message = await channel.send(generateMessage(dailyStandup));
-      
+
       await prisma.standUps.update({
         where: {
-          id: dailyStandup.id
+          id: dailyStandup.id,
         },
         data: {
-          messageId: message.id
-        }
-      })
+          messageId: message.id,
+        },
+      });
     }
 
     return res.send(dailyStandup);
@@ -46,9 +46,11 @@ router.post("/join", async (req, res) => {
     let userId = req.session.passport.user;
 
     let selectedStandup = await getDailyStandup();
-    // I hate this but idk if I can just fix my query it's giving me agita(?) 
-    let count = selectedStandup.standupMembers.some(member => member.user.id === userId)
-    
+    // I hate this but idk if I can just fix my query it's giving me agita(?)
+    let count = selectedStandup.standupMembers.some(
+      (member) => member.user.id === userId
+    );
+
     if (count) {
       return res.send(selectedStandup);
     }
@@ -69,15 +71,14 @@ router.post("/join", async (req, res) => {
           select: {
             user: true,
             tasks: true,
-            id: true
+            id: true,
           },
         },
       },
     });
 
-    
     // invoke generate message
-    await updateMessage(updatedStandup)
+    await updateMessage(updatedStandup);
 
     return res.send(updatedStandup);
   } catch (err) {
@@ -107,20 +108,20 @@ router.put("/task", async (req, res) => {
 
     await prisma.tasks.update({
       where: {
-        id: taskId
+        id: taskId,
       },
       data: update,
     });
 
     // invoke generate message
     let updatedStandup = await getDailyStandup();
-    await updateMessage(updatedStandup)
-    
+    await updateMessage(updatedStandup);
+
     return res.send(updatedStandup);
-  }catch(err) {
-    console.error(err)
+  } catch (err) {
+    console.error(err);
   }
-})
+});
 
 router.post("/task", async (req, res) => {
   try {
@@ -133,20 +134,22 @@ router.post("/task", async (req, res) => {
     // update current standup with req.body
     let updatedStandupMembers = await prisma.standUpMembers.update({
       where: {
-        id: standupMemberId
+        id: standupMemberId,
       },
       data: {
         tasks: {
           create: {
             label: req.body.label,
-            completed: false
+            completed: false,
           },
         },
       },
     });
 
     if (!updatedStandupMembers) {
-      return res.status(401).send("User is not authorized to perform this action");
+      return res
+        .status(401)
+        .send("User is not authorized to perform this action");
     }
 
     const standup = await getDailyStandup();
@@ -158,32 +161,32 @@ router.post("/task", async (req, res) => {
   }
 });
 
-router.delete("/task/:id", async (req,res) => {
+router.delete("/task/:id", async (req, res) => {
   try {
     if (!req.isAuthenticated()) {
       return res.status(401).send("User is not authenticated.");
     }
 
     let userId = req.session.passport.user;
-    let taskId = req.params.taskId; 
+    let taskId = req.params.taskId;
     console.log(taskId);
 
     await prisma.tasks.delete({
       where: {
-        id: taskId
-      }
-    })
-    
+        id: taskId,
+      },
+    });
+
     let updatedStandup = await getDailyStandup();
 
     // update discord message
     await updateMessage(updatedStandup);
 
     return res.send(updatedStandup);
-  } catch(err) {
+  } catch (err) {
     console.error(err);
   }
-})
+});
 
 async function getDailyStandup() {
   let standup = await prisma.standUps.findFirst({
@@ -195,21 +198,21 @@ async function getDailyStandup() {
         select: {
           user: true,
           tasks: true,
-          id: true
+          id: true,
         },
       },
     },
   });
 
   if (!standup) {
-    console.log("Couldn't find todays standup, making a new one")
+    console.log("Couldn't find todays standup, making a new one");
     standup = await createStandup();
   }
 
   return standup;
 }
 
-async function updateMessage (standup) {
+async function updateMessage(standup) {
   const channel = await client.channels.cache.get(process.env.CHANNEL_ID);
   const message = await channel.messages.fetch(standup.messageId);
   console.log("is message fetch working?: ", message);
