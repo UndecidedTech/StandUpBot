@@ -17,6 +17,13 @@ import {
 import { createGlobalStyle } from "styled-components";
 import axios from "axios";
 
+const { REACT_APP_MY_ENV } = process.env;
+if (REACT_APP_MY_ENV && REACT_APP_MY_ENV === 'production') {
+  axios.defaults.baseURL = 'https://standupbotapp.herokuapp.com/api';
+} else if (REACT_APP_MY_ENV && REACT_APP_MY_ENV === 'development') {
+  axios.defaults.baseURL = 'https://dev.hotswaps.io/api';
+}
+
 function App() {
   const [standupObj, setStandupObj] = useState({});
   const {
