@@ -22,7 +22,7 @@
   "proxy": "http://localhost:5000/api",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "env-cmd -e production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
