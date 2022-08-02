@@ -168,7 +168,7 @@ router.delete("/task/:id", async (req, res) => {
     }
 
     let userId = req.session.passport.user;
-    let taskId = req.params.taskId;
+    let taskId = req.params.id;
     console.log("taskId: ", taskId);
 
     await prisma.tasks.delete({
