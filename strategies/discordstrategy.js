@@ -27,7 +27,7 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: process.env.CLIENT_REDIRECT,
+      callbackURL: process.env.NODE_ENV === "production" ? "https://standupbotapp.herokuapp.com/api/auth/redirect" : "http://localhost:5000/api/auth/redirect",
       scope: scopes,
     },
     async (accessToken, refreshToken, profile, done) => {

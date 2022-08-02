@@ -76,8 +76,8 @@ app.use("/api/standups", standups);
 // TODO use /api/standups to check if there is a standup for that day, if not create it for safety because I don't trust this
 const job = schedule.scheduleJob('0 0 0 * *', () => createStandup());
 
-if (process.env.NODE_ENV === "production") {
+// if (process.env.NODE_ENV === "production") {
   app.use(express.static("./frontend/standups/build/"));
-}
+// }
 
 app.listen(port, () => console.log(`server started on ${port}`));
