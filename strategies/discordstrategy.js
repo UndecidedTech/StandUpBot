@@ -40,7 +40,7 @@ passport.use(
       if (user) {
         console.log("user exists: ", user);
         let updatedUser = await prisma.users.update({
-          where: { discordId: profile.id },
+          where: { id: user.id },
           data: {
             avatar: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.jpg`,
             username: profile.username
