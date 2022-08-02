@@ -39,7 +39,13 @@ passport.use(
       // if user exists return existing user
       if (user) {
         console.log("user exists: ", user);
-        return done(null, user);
+        let updatedUser = await prisma.users.update({
+          where: { discordId: profile.id },
+          data: {
+            avatar: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.jpg`
+          }
+        })
+        return done(null, updatedUser);
       }
 
       // if user doesn't exist, create in DB

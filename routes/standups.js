@@ -133,8 +133,7 @@ router.post("/task", async (req, res) => {
     // update current standup with req.body
     let updatedStandupMembers = await prisma.standUpMembers.update({
       where: {
-        id: standupMemberId,
-        userId
+        id: standupMemberId
       },
       data: {
         tasks: {
