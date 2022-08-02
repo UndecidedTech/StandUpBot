@@ -44,11 +44,6 @@ router.post("/join", async (req, res) => {
     }
 
     let userId = req.session.passport.user;
-    // let currUser = await prisma.users.findFirst({
-    //   where: {
-    //     id: userId,
-    //   },
-    // });
 
     let selectedStandup = await getDailyStandup();
     // I hate this but idk if I can just fix my query it's giving me agita(?) 

@@ -28,7 +28,7 @@ function TodoCard({ member }) {
         "/standups/task",
         {
           ...newTaskObj,
-          standupId,
+          id: member.id,
         },
         { withCredentials: true }
       )

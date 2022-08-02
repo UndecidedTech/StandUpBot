@@ -20,7 +20,6 @@ import axios from "axios";
 function App() {
   const [standupObj, setStandupObj] = useState({});
   const {
-    state: { username },
     dispatch,
   } = useContext(UserContext);
   const location = useLocation();
