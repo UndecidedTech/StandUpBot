@@ -3,11 +3,12 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { UserContext } from "../context/UserContext";
-
+import { HiOutlineTrash } from "react-icons/hi";
 
 function TodoCard({ member, setStandupObj }) {
-
-  const { state: { username } } = useContext(UserContext);
+  const {
+    state: { username },
+  } = useContext(UserContext);
   const [showForm, setShowForm] = useState(true);
   const [newTaskObj, setNewTaskObj] = useState({
     label: "",
@@ -40,45 +41,55 @@ function TodoCard({ member, setStandupObj }) {
       });
   }
 
+  function handleClick(task) {
+    console.log(task.id);
+  }
+
   return (
     <CardWrapper>
       <DiscordAviBackground>
         <DiscordAvi background={member.user.avatar} />
         <Username>{member.user.username}</Username>
       </DiscordAviBackground>
-      <div>
+      <TaskColumn>
         {member &&
           member.tasks &&
           member.tasks.map((task) => {
             return (
-              <label>
-                <input type="checkbox" /> {task.label}
-              </label>
+              <TaskItem>
+                <input type="checkbox" /> {task.label}{" "}
+                <RemoveDefaultButton
+                  onClick={() => {
+                    handleClick(task);
+                  }}
+                >
+                  <HiOutlineTrash></HiOutlineTrash>
+                </RemoveDefaultButton>
+              </TaskItem>
             );
           })}
-      </div>
-       { member.user.username === username && (
+      </TaskColumn>
+      {member.user.username === username && (
         <div>
           {showForm ? (
             <CreateTask onClick={handleShowForm}>New Task</CreateTask>
           ) : (
-            <form onSubmit={handleSubmit}>
+            <NewTaskForm onSubmit={handleSubmit}>
               <label>
-                New Task:
-                <input
+                <NewTaskText
                   type="text"
                   name="label"
                   onChange={handleChange}
                   value={newTaskObj.label}
+                  placeholder="New Task"
                 />
               </label>
-              <input type="submit" value="Submit" />
-            </form>
+              <SubmitButton type="submit">Submit</SubmitButton>
+            </NewTaskForm>
           )}
         </div>
-      )
-    }
-          </CardWrapper>
+      )}
+    </CardWrapper>
   );
 }
 
@@ -128,9 +139,68 @@ const DiscordAviBackground = styled.div`
 `;
 
 const CreateTask = styled.button`
-  border-radius: 18px;
-  background: transparent;
-  color: green;
+  border-radius: 16px;
+  border: none;
+  background: grey;
+  color: white;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
+  font-size: 17px;
+  &:hover {
+    background: green;
+  }
+  padding: 7px 25px 7px;
+`;
+
+const TaskColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+  margin-bottom: 5px;
+`;
+
+const TaskItem = styled.label`
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px;
+`;
+
+const RemoveDefaultButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1em;
+  color: grey;
+  &:hover {
+    color: red;
+  }
+`;
+
+const NewTaskText = styled.textarea`
+  width: 200px;
+  height: 25px;
+  border-radius: 15px;
+  font-family: "Poppins", sans-serif;
+`;
+
+const SubmitButton = styled.button`
+  border-radius: 16px;
+  border: none;
+  background: grey;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  &:hover {
+    background: green;
+  }
+  padding: 4px 15px 4px;
+`;
+
+const NewTaskForm = styled.form`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
 `;
