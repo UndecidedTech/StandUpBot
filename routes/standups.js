@@ -51,8 +51,9 @@ router.post("/join", async (req, res) => {
     // });
 
     let selectedStandup = await getDailyStandup();
-    let count = selectedStandup.standupMembers.some(member => member.userId === userId)
-
+    // I hate this but idk if I can just fix my query it's giving me agita(?) 
+    let count = selectedStandup.standupMembers.some(member => member.user.id === userId)
+    
     if (count) {
       return res.send(selectedStandup);
     }

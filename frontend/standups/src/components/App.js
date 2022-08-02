@@ -54,7 +54,6 @@ function App() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    console.log("here??");
     axios
       .get("/users/current-username", {
         withCredentials: true,
@@ -80,7 +79,6 @@ function App() {
     <>
       <GlobalStyle />
       <Header className="App-Header">
-        {username && username}
         <NavBar />
       </Header>
       <Switch>
