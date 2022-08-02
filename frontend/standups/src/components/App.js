@@ -17,13 +17,6 @@ import {
 import { createGlobalStyle } from "styled-components";
 import axios from "axios";
 
-const { REACT_APP_MY_ENV } = process.env;
-if (REACT_APP_MY_ENV && REACT_APP_MY_ENV === 'production') {
-  axios.defaults.baseURL = 'https://standupbotapp.herokuapp.com/api';
-} else if (REACT_APP_MY_ENV && REACT_APP_MY_ENV === 'development') {
-  axios.defaults.baseURL = 'https://dev.hotswaps.io/api';
-}
-
 function App() {
   const [standupObj, setStandupObj] = useState({});
   const {
@@ -37,7 +30,7 @@ function App() {
   }/${current.getDate()}/${current.getFullYear()}`;
 
   useEffect(() => {
-    axios.get("/standups").then((res) => {
+    axios.get("/api/standups").then((res) => {
       setStandupObj(res.data);
       dispatch({
         type: Action.UPDATE,
@@ -50,7 +43,7 @@ function App() {
 
   function handleClick() {
     axios
-      .post("/standups/join", null, {
+      .post("/api/standups/join", null, {
         withCredentials: true,
       })
       .then((res) => {
@@ -61,7 +54,7 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     axios
-      .get("/users/current-username", {
+      .get("/api/users/current-username", {
         withCredentials: true,
       })
       .then((response) => {
