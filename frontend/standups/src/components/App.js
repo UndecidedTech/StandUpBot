@@ -4,7 +4,7 @@ import {
   Switch,
   Route,
   useLocation,
-  BrowserRouter as Router
+  BrowserRouter as Router,
 } from "react-router-dom";
 import { Header } from "semantic-ui-react";
 import NavBar from "./NavBar";
@@ -19,9 +19,7 @@ import axios from "axios";
 
 function App() {
   const [standupObj, setStandupObj] = useState({});
-  const {
-    dispatch,
-  } = useContext(UserContext);
+  const { dispatch } = useContext(UserContext);
   const location = useLocation();
 
   const current = new Date();
@@ -38,7 +36,7 @@ function App() {
           standupId: res.data.id,
         },
       });
-    })
+    });
   }, [dispatch]);
 
   function handleClick() {

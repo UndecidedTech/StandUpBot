@@ -12,7 +12,6 @@ var DiscordStrategy = require("passport-discord").Strategy;
 passport.serializeUser(function (user, done) {
   console.log("did I make it here:", user.id);
   done(null, user.id);
-
 });
 
 passport.deserializeUser(function (id, done) {
@@ -27,13 +26,16 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: process.env.NODE_ENV === "production" ? "https://standupbotapp.herokuapp.com/api/auth/redirect" : "http://localhost:5000/api/auth/redirect",
+      callbackURL:
+        process.env.NODE_ENV === "production"
+          ? "https://standupbotapp.herokuapp.com/api/auth/redirect"
+          : "http://localhost:5000/api/auth/redirect",
       scope: scopes,
     },
     async (accessToken, refreshToken, profile, done) => {
       console.log({ accessToken, refreshToken, profile });
       const user = await prisma.users.findFirst({
-        where: { discordId: profile.id }
+        where: { discordId: profile.id },
       });
 
       // if user exists return existing user
@@ -43,9 +45,9 @@ passport.use(
           where: { id: user.id },
           data: {
             avatar: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.jpg`,
-            username: profile.username
-          }
-        })
+            username: profile.username,
+          },
+        });
         return done(null, updatedUser);
       }
 
